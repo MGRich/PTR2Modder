@@ -23,12 +23,12 @@ if not os.path.isdir("config"):
     sys = sys[-4:-1]
     if sys == "TSC":
         sys = "NTSC"
-    con1.write(sys)
+    con1.write(sys + "\n")
     os.mkdir("miso")
     print("Copying into miso..")
     os.system("xcopy /s /q ogiso miso")
     h = str(raw_input("Do you plan using this in (b)asic mode or (c)reation mode? (B OR C)> "))
-    h = str(h)
+    h = str(h) + "\n"
     con1.write(h)
     if h == h.lower():
         print("Downloading tools..")
@@ -47,6 +47,7 @@ if not os.path.isdir("config"):
         con2 = open("create.conf", 'w+')
         print("Done with tools.\nChanging to basic mode will not get rid of the tools.")
         print("")
+        os.chdir("..")
         h = str(raw_input("What do you want your WIP folder where WIP mods are stored to be called? (cannot be called mods)> "))
         while h == "mods":
             print("Nice try.")
@@ -57,6 +58,6 @@ if not os.path.isdir("config"):
             print("That didn't work, going with 'wip'.")
             os.mkdir("wip")
     print("Congratulations, you're now all set!")
-    print("The title and main menu will now load in a second.")
-    time.sleep(3)
-    os.system('cls')
+    print("The program will now restart to load config and startup normally.")
+    time.sleep(5)
+    os.execv(sys.executable)
