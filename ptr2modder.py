@@ -56,8 +56,8 @@ if not os.path.isdir("config"):
             os.mkdir(h)
         except WindowsError:
             print("That didn't work, going with 'wip'.")
-            os.mkdir("wip")
+            os.mkdir("wip") 
     print("Congratulations, you're now all set!")
-    print("The program will now restart to load config and startup normally.")
+    print("The program will now shut down to load the config correctly.")
     time.sleep(5)
-    os.execv(sys.executable)
+    exit()
