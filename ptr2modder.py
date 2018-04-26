@@ -12,6 +12,7 @@ v = open("temp/version.txt").read()
 v = float(v[:-1])
 
 if not os.path.isfile("update.exe"):
+    print("Downloading updater..")
     urllib.urlretrieve("https://mgrich.github.io/storage/ptr2modder/updateb.exe", "update.exe")
 if not os.path.isdir("config"):
     print("Welcome to PTR2Modder.\nThis is a program specifically made for making and using PTR2 mods.\nSpecial thanks to the PTR2 Modding Discord for motivating me to do this.")
