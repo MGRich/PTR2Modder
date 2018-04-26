@@ -1,4 +1,4 @@
-import os, sys, time, linecache, urllib, ctypes, ast, subprocess
+import os, time, linecache, urllib, ctypes, ast, subprocess
 from msvcrt import getch
 from decimal import Decimal as decimal
 
