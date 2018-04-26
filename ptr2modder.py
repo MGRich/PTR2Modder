@@ -1,5 +1,4 @@
-import os, sys, glob, time, linecache, urllib, ctypes, ast
-from shutil import copy2 as cpy
+import os, sys, time, linecache, urllib, ctypes, ast, subprocess
 from msvcrt import getch
 from decimal import Decimal as decimal
 
@@ -11,6 +10,9 @@ title("PTR2Modder")
 urllib.urlretrieve("https://mgrich.github.io/storage/ptr2modder/versionb.txt", "temp/version.txt")
 v = open("temp/version.txt").read()
 v = float(v[:-1])
+
+if not os.path.isfile("update.exe"):
+    urllib.urlretrieve("https://mgrich.github.io/storage/ptr2modder/updateb.exe", "update.exe")
 if not os.path.isdir("config"):
     print("Welcome to PTR2Modder.\nThis is a program specifically made for making and using PTR2 mods.\nSpecial thanks to the PTR2 Modding Discord for motivating me to do this.")
     print("")
@@ -87,7 +89,7 @@ while True:
     print("Icon by Charx")
     print("")
     while True:
-        if v > 1.0:
+        if v > 0.5:
             opt = ["1", "2", "3", "4", "5", "6"]
         else:
             opt = ["1", "2", "3", "4", "5"]
@@ -96,7 +98,7 @@ while True:
         print("3. Unapply mod")
         print("4. Check news")
         print("5. Exit properly")
-        if v > 1.0:
+        if v > 0.5:
             print("6. Install new version")
         ch = getch()
         if not ch in opt:
@@ -175,13 +177,67 @@ while True:
             os.system("move " + ibrn + ".")
             os.system("imgburn.exe /MODE BUILD /SRC miso /DEST PTR2Modded.iso /FILESYSTEM \"ISO9660 + UDF \" /UDFREVISION \"1.02\" /NOIMAGEDETAILS /ROOTFOLDER YES /VOLUMELABEL \"MISO\" /OVERWRITE YES /START /CLOSE")
             os.system("move imgburn.exe config/ibrn")
+            no = open("config/mds/on.conf", "w+")
+            no.write(ate + "\n")
+            no.close()
             print("Done! Exported to PTR2Modded.iso.")
         os.system("pause")
+    elif ch == "3":
+        #tbh, very near same to ch 2
+        os.chdir("config/mds")
+        m = open("on.conf", "r")
+        mds = m.readlines()
+        print(mds)
+        os.chdir("../../mods")
+        mds = map(lambda s: s.strip(), mds)
+        for x in mds:
+            mdl = []
+            mdlo = []
+            md = linecache.getline(x + "/mod.inf", 1)
+            mdlo.append(x)
+            mdl.append(md)
+        mdl = map(lambda s: s.strip(), mdl)
+        while True:
+            print('\n'.join(mdl))
+            print("")
+            m = raw_input("Which mod?> ")
+            if not m in mdl:
+                print("Mod doesnt exist.")
+                os.system("pause")
+            else:
+                break
+        blo = mdl.index(m)
+        ate = mdlo[int(blo)]
+        os.chdir(ate)
+        pips = linecache.getline("mod.inf", 5)
+        pips = ast.literal_eval(pips)
+        os.chdir("../..")
+        for x in pips:
+            if '.' in x:
+                os.remove("miso/" + x)
+                os.system("xcopy ogiso\\" + x + " miso")
+        print("Un-applying mod..")
+        print("Done with general modding. Starting with IMGBurn..")
+        os.system("move " + ibrn + ".")
+        os.system("imgburn.exe /MODE BUILD /SRC miso /DEST PTR2Modded.iso /FILESYSTEM \"ISO9660 + UDF \" /UDFREVISION \"1.02\" /NOIMAGEDETAILS /ROOTFOLDER YES /VOLUMELABEL \"MISO\" /OVERWRITE YES /START /CLOSE")
+        os.system("move imgburn.exe config/ibrn")
+        print("Done! Exported to PTR2Modded.iso.")
+        os.system("pause")
     elif ch == "4":
+        print("")
         print(open("temp/news.txt").read())
+        print("")
         os.system("pause")
     elif ch == "5":
         exit()
+    elif ch == "6":
+        print("This will fully replace PTR2Modder. This process may take a while to complete.")
+        if not os.path.isfile("update.py"):
+            subprocess.Popen("updateb.exe")
+        else:
+            subprocess.Popen(["python.exe", "updateb.py"])
+        exit()
+
 
 
 
