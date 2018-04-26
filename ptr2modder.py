@@ -234,9 +234,9 @@ while True:
     elif ch == "6":
         print("This will fully replace PTR2Modder. This process may take a while to complete.")
         if not os.path.isfile("update.py"):
-            subprocess.Popen("updateb.exe")
+            subprocess.Popen("update.exe")
         else:
-            subprocess.Popen(["python.exe", "updateb.py"])
+            subprocess.Popen(["python.exe", "update.py"])
         exit()
 
 
