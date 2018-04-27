@@ -61,15 +61,15 @@ if not os.path.isdir("config"):
         print("Done with tools.\nChanging to basic mode will not get rid of the tools.")
         print("")
         os.chdir("..")
-        h = str(raw_input("What do you want your WIP folder where WIP mods are stored to be called? (cannot be called mods)> "))
-        while h == "mods":
-            print("Nice try.")
-            h = input("Pick an actual name> ")
-        try:
-            os.mkdir(h)
-        except WindowsError:
-            print("That didn't work, going with 'wip'.")
-            os.mkdir("wip") 
+        while True:
+            h = str(raw_input("What do you want your WIP folder where WIP mods are stored to be called? (cannot be called mods)> "))
+            while h == "mods":
+                print("Nice try.")
+                h = input("Pick an actual name> ")
+            try:
+                os.mkdir(h)
+            except WindowsError:
+                print("That didn't work, try again.")
     print("Congratulations, you're now all set!")
     print("The program will now shut down to load the config correctly.")
     time.sleep(5)
@@ -251,7 +251,3 @@ while True:
         else:
             subprocess.Popen(["python.exe", "update.py"])
         exit()
-
-
-
-
