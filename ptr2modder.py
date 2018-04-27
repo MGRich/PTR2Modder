@@ -124,8 +124,8 @@ while True:
     if ch == "1":
         os.chdir("mods")
         hg = str(raw_input("What do you want your mod's folder to be called?> "))
-        os.mkdir(h)
-        os.chdir(h)
+        os.mkdir(hg)
+        os.chdir(hg)
         print("Now to setup configuration:")
         m = open("mod.inf", "w+")
         h1 = str(raw_input("Name of mod> "))
