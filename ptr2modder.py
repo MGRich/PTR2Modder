@@ -79,6 +79,13 @@ else:
     ibrn = os.getcwd() + "\\config\\ibrn\\imgburn.exe"
     if os.path.isfile("config/create.conf"):
         confc = open("config/create.conf")
+    print("Refreshing mods..")
+    hahayes = os.listdir("mods")
+    yeshaha = open("config/mods.conf", "w")
+    yeshaha.truncate()
+    for x in hahayes:
+        yeshaha.write(x + "\n")
+    yeshaha.close()
 
 print("Downloading news..")
 urllib.urlretrieve("https://mgrich.github.io/storage/ptr2modder/news.txt", "temp/news.txt")
@@ -90,17 +97,18 @@ while True:
         print("Tool by RMGRich")
         print("Icon by Charx")
         print("")
-        if v > 1.1:
-            opt = ["1", "2", "3", "4", "5", "6"]
+        if v > 1.2:
+            opt = ["1", "2", "3", "4", "5", "6", "7"]
         else:
-            opt = ["1", "2", "3", "4", "5"]
+            opt = ["1", "2", "3", "4", "5", "7"]
         print("1. Convert ISO mod to usable mod")
         print("2. Apply mod")
         print("3. Unapply mod")
         print("4. Check news")
-        print("5. Exit properly")
-        if v > 1.1:
-            print("6. Install new version")
+        print("5. Refresh mods")
+        print("6. Exit properly")
+        if v > 1.2:
+            print("7. Install new version")
         ch = getch()
         if not ch in opt:
             print("Invalid answer")
@@ -243,8 +251,16 @@ while True:
         print("")
         os.system("pause")
     elif ch == "5":
-        exit()
+        print("Refreshing mods..")
+        hahayes = os.listdir("mods")
+        yeshaha = open("config/mods.conf", "w")
+        yeshaha.truncate()
+        for x in hahayes:
+            yeshaha.write(x + "\n")
+        yeshaha.close()
     elif ch == "6":
+        exit()
+    elif ch == "7":
         print("This will fully replace PTR2Modder. This process may take a while to complete.")
         if not os.path.isfile("update.py"):
             subprocess.Popen("update.exe")
