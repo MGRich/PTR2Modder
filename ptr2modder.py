@@ -90,17 +90,17 @@ else:
 print("Downloading news..")
 urllib.urlretrieve("https://mgrich.github.io/storage/ptr2modder/news.txt", "temp/news.txt")
 while True:
+    os.system("cls")
+    print("")
+    print("PTR2Modder")
+    print("Tool by RMGRich")
+    print("Icon by Charx")
+    print("")
+    if v > 1.2:
+        opt = ["1", "2", "3", "4", "5", "6", "7"]
+    else:
+        opt = ["1", "2", "3", "4", "5", "6"]
     while True:
-        os.system("cls")
-        print("")
-        print("PTR2Modder")
-        print("Tool by RMGRich")
-        print("Icon by Charx")
-        print("")
-        if v > 1.2:
-            opt = ["1", "2", "3", "4", "5", "6", "7"]
-        else:
-            opt = ["1", "2", "3", "4", "5", "7"]
         print("1. Convert ISO mod to usable mod")
         print("2. Apply mod")
         print("3. Unapply mod")
@@ -114,6 +114,11 @@ while True:
             print("Invalid answer")
             time.sleep(3)
             os.system("cls")
+            print("")
+            print("PTR2Modder")
+            print("Tool by RMGRich")
+            print("Icon by Charx")
+            print("")
         else:
             break
     if ch == "1":
