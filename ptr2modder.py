@@ -83,13 +83,13 @@ else:
 print("Downloading news..")
 urllib.urlretrieve("https://mgrich.github.io/storage/ptr2modder/news.txt", "temp/news.txt")
 while True:
-    os.system("cls")
-    print("")
-    print("PTR2Modder")
-    print("Tool by RMGRich")
-    print("Icon by Charx")
-    print("")
     while True:
+        os.system("cls")
+        print("")
+        print("PTR2Modder")
+        print("Tool by RMGRich")
+        print("Icon by Charx")
+        print("")
         if v > 1.1:
             opt = ["1", "2", "3", "4", "5", "6"]
         else:
