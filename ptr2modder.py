@@ -153,6 +153,8 @@ while True:
             mdl.append(md)
         mdl = map(lambda s: s.strip(), mdl)
         while True:
+            print("")
+            print("Mods installed:")
             print('\n'.join(mdl))
             print("")
             m = raw_input("Which mod?> ")
@@ -197,6 +199,8 @@ while True:
             mdl.append(md)
         mdl = map(lambda s: s.strip(), mdl)
         while True:
+            print("")
+            print("Active mods:")
             print('\n'.join(mdl))
             print("")
             m = raw_input("Which mod?> ")
