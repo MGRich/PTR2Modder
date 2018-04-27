@@ -90,7 +90,7 @@ while True:
     print("Icon by Charx")
     print("")
     while True:
-        if v > 0.5:
+        if v > 1.1:
             opt = ["1", "2", "3", "4", "5", "6"]
         else:
             opt = ["1", "2", "3", "4", "5"]
@@ -99,7 +99,7 @@ while True:
         print("3. Unapply mod")
         print("4. Check news")
         print("5. Exit properly")
-        if v > 0.5:
+        if v > 1.1:
             print("6. Install new version")
         ch = getch()
         if not ch in opt:
@@ -110,7 +110,7 @@ while True:
             break
     if ch == "1":
         os.chdir("mods")
-        h = str(raw_input("What do you want your mod's folder to be called?> "))
+        hg = str(raw_input("What do you want your mod's folder to be called?> "))
         os.mkdir(h)
         os.chdir(h)
         print("Now to setup configuration:")
@@ -123,6 +123,7 @@ while True:
         print("Please place your modified ISO contents (only the modified files) WITH THEIR CORRECT FOLDERS in the new 'iso' folder.\nMake sure you do it correctly, as if you mess it up, the mod wont work unless you start over.")
         os.mkdir("iso")
         os.system("pause")
+        os.chdir("iso")
         mm = []
         for root, directories, filenames in os.walk('.'):
             for filename in filenames: 
@@ -130,19 +131,18 @@ while True:
                     h = h[2:]
                     mm.append(h)
         m.write(str(mm))
-        m.write(str(linecache.getline(conf, 1)))
+        m.write("\n" + str(linecache.getline(conf, 1)))
         m.close()
-        os.chdir("../../config")
-        mm = open("mods.conf", "w+")
-        mm.write(h)
-        mm.close()
+        os.chdir("../../../config")
+        mmh = open("mods.conf", "w+")
+        mmh.write(hg)
+        mmh.close()
         os.chdir("..")
         print("Done.")
     elif ch == "2": 
         os.chdir("config")
         m = open("mods.conf", "r")
         mds = m.readlines()
-        print(mds)
         os.chdir("../mods")
         mds = map(lambda s: s.strip(), mds)
         for x in mds:
@@ -170,7 +170,6 @@ while True:
         else:
             os.chdir("iso")
             dc = os.getcwd()
-            print(dc)
             os.chdir("../../..")
             print("Applying mod..")
             os.system("xcopy /s /q /y " + dc + " miso")
@@ -186,9 +185,8 @@ while True:
     elif ch == "3":
         #tbh, very near same to ch 2
         os.chdir("config/mds")
-        m = open("on.conf", "r")
-        mds = m.readlines()
-        print(mds)
+        frink = open("on.conf", "r")
+        mds = frink.readlines()
         os.chdir("../../mods")
         mds = map(lambda s: s.strip(), mds)
         for x in mds:
@@ -213,10 +211,21 @@ while True:
         pips = linecache.getline("mod.inf", 5)
         pips = ast.literal_eval(pips)
         os.chdir("../..")
+        os.chdir("config/mds")
+        with open('on.temp', 'w+') as hh:
+            for x in frink:
+                if not x == m:
+                    hh.write(x)
+        frink.close()
+        os.remove("on.conf")
+        os.rename("on.temp", "on.conf")
+        os.chdir("../..")
         for x in pips:
             if '.' in x:
-                os.remove("miso/" + x)
-                os.system("xcopy ogiso\\" + x + " miso")
+                print(x)
+                if os.path.isfile("miso\\" + x):
+                    os.remove("miso\\" + x)
+                os.system("copy /y ogiso\\" + x + " miso\\" + x)
         print("Un-applying mod..")
         print("Done with general modding. Starting with IMGBurn..")
         os.system("move " + ibrn + ".")
