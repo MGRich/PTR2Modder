@@ -96,7 +96,7 @@ while True:
     print("Tool by RMGRich")
     print("Icon by Charx")
     print("")
-    if v > 1.2:
+    if v > 1.21:
         opt = ["1", "2", "3", "4", "5", "6", "7"]
     else:
         opt = ["1", "2", "3", "4", "5", "6"]
@@ -107,7 +107,7 @@ while True:
         print("4. Check news")
         print("5. Refresh mods")
         print("6. Exit properly")
-        if v > 1.2:
+        if v > 1.21:
             print("7. Install new version")
         ch = getch()
         if not ch in opt:
