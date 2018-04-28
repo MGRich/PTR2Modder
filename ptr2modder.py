@@ -96,7 +96,7 @@ while True:
     print("Tool by RMGRich")
     print("Icon by Charx")
     print("")
-    if v > 1.22:
+    if v > 1.3:
         opt = ["1", "2", "3", "4", "5", "6", "7"]
     else:
         opt = ["1", "2", "3", "4", "5", "6"]
@@ -107,7 +107,7 @@ while True:
         print("4. Check news")
         print("5. Refresh mods")
         print("6. Exit properly")
-        if v > 1.22:
+        if v > 1.3:
             print("7. Install new version")
         ch = getch()
         if not ch in opt:
@@ -182,10 +182,14 @@ while True:
                 ate = mdlo[int(blo)]
                 os.chdir(ate)
                 print("Is this the mod you want? (N if no, anything else if yes)")
-                print("Name: " + str(linecache.getline("mod.inf", 1)))
-                print("Author: " + str(linecache.getline("mod.inf", 2)))
-                print("Version: " + str(linecache.getline("mod.inf", 3)))
-                print("Description: " + str(linecache.getline("mod.inf", 4)))
+                da = open("mod.inf")
+                dat = da.readlines()
+                dat = map(lambda s: s.strip(), dat)
+                print("Name: " + dat[0])
+                print("Author: " + dat[1])
+                print("Version: " + dat[2])
+                print("Description: " + dat[3])
+                da.close()
                 while True:
                     fishy = getch()
                     if fishy == "n":
@@ -207,14 +211,16 @@ while True:
             dc = os.getcwd()
             os.chdir("../../..")
             print("Applying mod..")
+            no = open("config/mds/on.conf", "a+")
+            exprz = no.readlines()
+            if not str(ate + "\n") in exprz:
+                no.write(ate + "\n")
+            no.close()
             os.system("xcopy /s /q /y " + dc + " miso")
             print("Done with general modding. Starting with IMGBurn..")
             os.system("move " + ibrn + ".")
-            os.system("imgburn.exe /MODE BUILD /SRC miso /DEST PTR2Modded.iso /FILESYSTEM \"ISO9660 + UDF \" /UDFREVISION \"1.02\" /NOIMAGEDETAILS /ROOTFOLDER YES /VOLUMELABEL \"MISO\" /OVERWRITE YES /START /CLOSE")
+            #os.system("imgburn.exe /MODE BUILD /SRC miso /DEST PTR2Modded.iso /FILESYSTEM \"ISO9660 + UDF \" /UDFREVISION \"1.02\" /NOIMAGEDETAILS /ROOTFOLDER YES /VOLUMELABEL \"MISO\" /OVERWRITE YES /START /CLOSE")
             os.system("move imgburn.exe config/ibrn")
-            no = open("config/mds/on.conf", "w+")
-            no.write(ate + "\n")
-            no.close()
             print("Done! Exported to PTR2Modded.iso.")
         os.system("pause")
     elif ch == "3":
@@ -224,9 +230,10 @@ while True:
         mds = frink.readlines()
         os.chdir("../../mods")
         mds = map(lambda s: s.strip(), mds)
+        wadl = mds
+        mdl = []
+        mdlo = []
         for x in mds:
-            mdl = []
-            mdlo = []
             md = linecache.getline(x + "/mod.inf", 1)
             mdlo.append(x)
             mdl.append(md)
@@ -250,23 +257,22 @@ while True:
         os.chdir("../..")
         os.chdir("config/mds")
         with open('on.temp', 'w+') as hh:
-            for x in frink:
-                if not x == m:
-                    hh.write(x)
+            for x in wadl:
+                if not x == ate:
+                    hh.write(x + "\n")
         frink.close()
         os.remove("on.conf")
         os.rename("on.temp", "on.conf")
         os.chdir("../..")
         for x in pips:
             if '.' in x:
-                print(x)
                 if os.path.isfile("miso\\" + x):
                     os.remove("miso\\" + x)
                 os.system("copy /y ogiso\\" + x + " miso\\" + x)
         print("Un-applying mod..")
         print("Done with general modding. Starting with IMGBurn..")
         os.system("move " + ibrn + ".")
-        os.system("imgburn.exe /MODE BUILD /SRC miso /DEST PTR2Modded.iso /FILESYSTEM \"ISO9660 + UDF \" /UDFREVISION \"1.02\" /NOIMAGEDETAILS /ROOTFOLDER YES /VOLUMELABEL \"MISO\" /OVERWRITE YES /START /CLOSE")
+        #os.system("imgburn.exe /MODE BUILD /SRC miso /DEST PTR2Modded.iso /FILESYSTEM \"ISO9660 + UDF \" /UDFREVISION \"1.02\" /NOIMAGEDETAILS /ROOTFOLDER YES /VOLUMELABEL \"MISO\" /OVERWRITE YES /START /CLOSE")
         os.system("move imgburn.exe config/ibrn")
         print("Done! Exported to PTR2Modded.iso.")
         os.system("pause")
