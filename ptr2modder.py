@@ -96,7 +96,7 @@ while True:
     print("Tool by RMGRich")
     print("Icon by Charx")
     print("")
-    if v > 1.3:
+    if v > 1.4:
         opt = ["1", "2", "3", "4", "5", "6", "7", "8"]
     else:
         opt = ["1", "2", "3", "4", "5", "6", "7"]
@@ -108,7 +108,7 @@ while True:
         print("5. Refresh mods")
         print("6. Options")
         print("7. Exit properly")
-        if v > 1.3:
+        if v > 1.4:
             print("8. Install new version")
         ch = getch()
         if not ch in opt:
@@ -289,7 +289,7 @@ while True:
         if not len(y) >= 3:
             a = open("config/basic.temp", "w+")
             b = raw_input("What do you want your ISO's name to be called?> ")
-            y.append(b)
+            y.append(b + "\n")
             a.writelines(y)
             z.close()
             a.close()
