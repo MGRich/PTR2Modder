@@ -161,9 +161,9 @@ while True:
         mds = m.readlines()
         os.chdir("../mods")
         mds = map(lambda s: s.strip(), mds)
+        mdl = []
+        mdlo = []
         for x in mds:
-            mdl = []
-            mdlo = []
             md = linecache.getline(x + "/mod.inf", 1)
             mdlo.append(x)
             mdl.append(md)
@@ -177,11 +177,28 @@ while True:
             if not m in mdl:
                 print("Mod doesnt exist.")
                 os.system("pause")
-            else:
-                break
-        blo = mdl.index(m)
-        ate = mdlo[int(blo)]
-        os.chdir(ate)
+            else:   
+                blo = mdl.index(m)
+                ate = mdlo[int(blo)]
+                os.chdir(ate)
+                print("Is this the mod you want? (N if no, anything else if yes)")
+                print("Name: " + str(linecache.getline("mod.inf", 1)))
+                print("Author: " + str(linecache.getline("mod.inf", 2)))
+                print("Version: " + str(linecache.getline("mod.inf", 3)))
+                print("Description: " + str(linecache.getline("mod.inf", 4)))
+                while True:
+                    fishy = getch()
+                    if fishy == "n":
+                        mrl = "n"
+                        break
+                    else:
+                        mrl = "h"
+                        break
+                if mrl == "n":
+                    print("Returning to list..")
+                    os.chdir("..")
+                else:
+                    break
         pips = linecache.getline("mod.inf", 6)
         if not pips == str(linecache.getline(conf, 1)):
             print("This mod is not meant for your region.")
