@@ -97,18 +97,19 @@ while True:
     print("Icon by Charx")
     print("")
     if v > 1.3:
-        opt = ["1", "2", "3", "4", "5", "6", "7"]
+        opt = ["1", "2", "3", "4", "5", "6", "7", "8"]
     else:
-        opt = ["1", "2", "3", "4", "5", "6"]
+        opt = ["1", "2", "3", "4", "5", "6", "7"]
     while True:
         print("1. Convert ISO mod to usable mod")
         print("2. Apply mod")
         print("3. Unapply mod")
         print("4. Check news")
         print("5. Refresh mods")
-        print("6. Exit properly")
+        print("6. Options")
+        print("7. Exit properly")
         if v > 1.3:
-            print("7. Install new version")
+            print("8. Install new version")
         ch = getch()
         if not ch in opt:
             print("Invalid answer")
@@ -217,11 +218,24 @@ while True:
                 no.write(ate + "\n")
             no.close()
             os.system("xcopy /s /q /y " + dc + " miso")
+            z = open("config/basic.conf")
+            y = z.readlines()
+            if not len(y) >= 3:
+                a = open("config/basic.temp", "w+")
+                b = raw_input("What do you want your ISO's name to be called?> ")
+                y.append(b)
+                a.writelines(y)
+                z.close()
+                a.close()
+                os.remove("basic.conf")
+                os.rename("basic.temp", "basic.conf")
+            z.close()
+            c = map(lambda s: s.strip(), y)
             print("Done with general modding. Starting with IMGBurn..")
             os.system("move " + ibrn + ".")
-            os.system("imgburn.exe /MODE BUILD /SRC miso /DEST PTR2Modded.iso /FILESYSTEM \"ISO9660 + UDF \" /UDFREVISION \"1.02\" /NOIMAGEDETAILS /ROOTFOLDER YES /VOLUMELABEL \"MISO\" /OVERWRITE YES /START /CLOSE")
+            os.system("imgburn.exe /MODE BUILD /SRC miso /DEST " + c[2] + ".iso /FILESYSTEM \"ISO9660 + UDF \" /UDFREVISION \"1.02\" /NOIMAGEDETAILS /ROOTFOLDER YES /VOLUMELABEL \"MISO\" /OVERWRITE YES /START /CLOSE")
             os.system("move imgburn.exe config/ibrn")
-            print("Done! Exported to PTR2Modded.iso.")
+            print("Done! Exported to " + c[2] + ".iso.")
         os.system("pause")
     elif ch == "3":
         #tbh, very near same to ch 2
@@ -270,11 +284,23 @@ while True:
                     os.remove("miso\\" + x)
                 os.system("copy /y ogiso\\" + x + " miso\\" + x)
         print("Un-applying mod..")
+        z = open("config/basic.conf")
+        y = z.readlines()
+        if not len(y) >= 3:
+            a = open("config/basic.temp", "w+")
+            b = raw_input("What do you want your ISO's name to be called?> ")
+            y.append(b)
+            a.writelines(y)
+            z.close()
+            a.close()
+            os.remove("basic.conf")
+            os.rename("basic.temp", "basic.conf")
+        c = map(lambda s: s.strip(), y)
         print("Done with general modding. Starting with IMGBurn..")
         os.system("move " + ibrn + ".")
-        os.system("imgburn.exe /MODE BUILD /SRC miso /DEST PTR2Modded.iso /FILESYSTEM \"ISO9660 + UDF \" /UDFREVISION \"1.02\" /NOIMAGEDETAILS /ROOTFOLDER YES /VOLUMELABEL \"MISO\" /OVERWRITE YES /START /CLOSE")
+        os.system("imgburn.exe /MODE BUILD /SRC miso /DEST " + c[2] + ".iso /FILESYSTEM \"ISO9660 + UDF \" /UDFREVISION \"1.02\" /NOIMAGEDETAILS /ROOTFOLDER YES /VOLUMELABEL \"MISO\" /OVERWRITE YES /START /CLOSE")
         os.system("move imgburn.exe config/ibrn")
-        print("Done! Exported to PTR2Modded.iso.")
+        print("Done! Exported to " + c[2] + ".iso.")
         os.system("pause")
     elif ch == "4":
         print("")
@@ -290,8 +316,78 @@ while True:
             yeshaha.write(x + "\n")
         yeshaha.close()
     elif ch == "6":
-        exit()
+        os.chdir("config")
+        x = "1"
+        ob = ""
+        n = ""
+        z = open("basic.conf")
+        a = open("basic.temp", "w+")
+        while True:
+            if n == "true":
+                z.close()
+                a.close()
+                os.remove("basic.temp")
+                os.chdir("..")
+                break
+            os.system("cls")
+            z = open("basic.conf")
+            y = z.readlines()
+            b = map(lambda s: s.strip(), y)
+            a = open("basic.temp", "w+")
+            print("There isn't much here yet, but as I make create, there should be more popping up.")
+            print("Options (up, down, or enter (esc to exit)):")
+            o1 = " Region:    "
+            o2 = " Mode:      "
+            o3 = " ISO name:  "
+            while True:
+                exec("ob = o" + x)
+                ob = list(ob)
+                ob[0] = ">"
+                ob = "".join(ob)
+                exec("o" + x + " = ob")
+                print(o1 + b[0])
+                print(o2 + b[1])
+                try: 
+                    iso = b[2]
+                except IndexError:
+                    iso = "[NONE SPECIFIED]"
+                print(o3 + iso)
+                opc = ord(getch())
+                if opc == 224:
+                    x = int(x)
+                    opd = ord(getch())
+                    if opd == 80:    
+                        x = x + 1
+                        if x > 3:
+                            x = 3
+                    if opd == 72:
+                        x = x - 1
+                        if x < 1:
+                            x = 1
+                elif opc == 13:
+                    x = int(x)
+                    w = x - 1
+                    if x == 1:
+                        print("Pleae put either PAL or NTSC matching with your iso or else it will not work.")
+                    elif x == 2:
+                        print("Please put c for create more or b for basic mode.")
+                    opm = raw_input("New value?> ")
+                    if x == 3 and iso == "[NONE SPECIFIED]":
+                        y.append(opm + "\n")
+                    else:
+                        y[w] = opm + "\n"
+                    a.writelines(y)
+                    z.close()
+                    a.close()
+                    os.remove("basic.conf")
+                    os.rename("basic.temp", "basic.conf")
+                elif opc == 27:
+                    n = "true"
+                x = str(x)
+                break
     elif ch == "7":
+        exit()
+    elif ch == "8":
         print("This will fully replace PTR2Modder. This process may take a while to complete.")
         if not os.path.isfile("update.py"):
             subprocess.Popen("update.exe")
