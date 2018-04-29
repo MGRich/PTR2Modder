@@ -1,4 +1,4 @@
-import os, time, linecache, urllib, ctypes, ast, subprocess
+import os, time, linecache, urllib, ctypes, ast, subprocess, webbrowser
 from msvcrt import getch
 from decimal import Decimal as decimal
 
@@ -107,7 +107,7 @@ while True:
     print("Tool by RMGRich")
     print("Icon by Charx")
     print("")
-    if v > 1.4:
+    if v > 1.41:
         opt = ["1", "2", "3", "4", "5", "6", "7", "8"]
     else:
         opt = ["1", "2", "3", "4", "5", "6", "7"]
@@ -121,7 +121,7 @@ while True:
         print("5. Refresh mods")
         print("6. Options")
         print("7. Exit properly")
-        if v > 1.4:
+        if v > 1.41:
             print("8. Install new version")
         if d and cre:
             print("C. Creation Menu")
@@ -412,11 +412,9 @@ while True:
     elif ch == "7":
         exit()
     elif ch == "8":
-        print("This will fully replace PTR2Modder. This process may take a while to complete.")
-        if not os.path.isfile("update.py"):
-            subprocess.Popen("update.exe")
-        else:
-            subprocess.Popen(["python.exe", "update.py"])
+        print("Due to auto updating being removed, you must now update it manually.")
+        os.system("pause")
+        webbrowser.open("https://github.com/MGRich/PTR2Modder/releases")
         exit()
     elif ch == "c":
         ba = False
