@@ -18,14 +18,6 @@ else:
     urllib.urlretrieve("https://mgrich.github.io/storage/ptr2modder/versiond.txt", "temp/version.txt")
 v = open("temp/version.txt").read()
 v = float(v[:-1])
-if d:
-    if not os.path.isfile("updated.exe"):
-        print("Downlaoding DEV updater..")
-        urllib.urlretrieve("https://mgrich.github.io/storage/ptr2modder/updated.exe", "updated.exe")
-else:
-    if not os.path.isfile("update.exe"):
-        print("Downloading updater..")
-        urllib.urlretrieve("https://mgrich.github.io/storage/ptr2modder/updateb.exe", "update.exe")
 if not os.path.isdir("config"):
     print("Welcome to PTR2Modder.\nThis is a program specifically made for making and using PTR2 mods.\nSpecial thanks to the PTR2 Modding Discord for motivating me to do this.")
     print("")
@@ -82,6 +74,7 @@ if not os.path.isdir("config"):
                 os.mkdir(h)
             except WindowsError:
                 print("That didn't work, try again.")
+    con2.write(h)
     print("Congratulations, you're now all set!")
     print("The program will now shut down to load the config correctly.")
     time.sleep(5)
@@ -89,8 +82,6 @@ if not os.path.isdir("config"):
 else:
     conf = os.getcwd() + "\\config\\basic.conf"
     ibrn = os.getcwd() + "\\config\\ibrn\\imgburn.exe"
-    if os.path.isfile("config/create.conf"):
-        confc = open("config/create.conf")
     cre = linecache.getline(conf, 2)
     if cre == "c\n":
         cre = True
@@ -401,6 +392,10 @@ while True:
                     elif x == 2:
                         print("Please put c for create more or b for basic mode.")
                     opm = raw_input("New value?> ")
+                    if x == 2 and opm == "c":
+                        cre = True
+                    else:
+                        cre = False
                     if x == 3 and iso == "[NONE SPECIFIED]":
                         y.append(opm + "\n")
                     else:
@@ -440,7 +435,7 @@ while True:
                 while True:
                     print("1. Create mod (WIP)")
                     print("2. Manage mods (WIP)")
-                    print("3. Options (WIP)")
+                    print("3. Options")
                     print("B. Basic")
                     ch = getch()
                     if not ch in opt:
@@ -454,4 +449,61 @@ while True:
                         break
             if ch == "b":
                 ba = True
-        
+            elif ch == "3":
+                os.chdir("config")
+                x = "1"
+                ob = ""
+                n = ""
+                while True:
+                    if n == "true":
+                        if os.path.isfile("create.temp"):
+                            os.remove("create.temp")
+                        os.chdir("..")
+                        break
+                    os.system("cls")
+                    with open("create.conf") as z:
+                        y = z.readlines()
+                        b = map(lambda s: s.strip(), y)
+                    print("There isn't much here yet, but as I make create, there should be more popping up.")
+                    print("Options (up, down, or enter (esc to exit)):")
+                    o1 = " Workspace:  "
+                    while True:
+                        exec("ob = o" + x)
+                        ob = list(ob)
+                        ob[0] = ">"
+                        ob = "".join(ob)
+                        exec("o" + x + " = ob")
+                        for v in range(0,1):
+                            try: 
+                                b[v] = b[v]
+                            except IndexError:
+                                b.append("[NONE SPECIFIED]")
+                        print(o1 + b[0])
+                        opc = ord(getch())
+                        if opc == 224:
+                            x = int(x)
+                            opd = ord(getch())
+                            #if opd == 80:    
+                            #    x = x + 1
+                            #    if x > 1:
+                            #        x = 1
+                            #if opd == 72:
+                            #    x = x - 1
+                            #    if x < 1:
+                            #        x = 1
+                        elif opc == 13:
+                            x = int(x)
+                            w = x - 1
+                            opm = raw_input("New value?> ")
+                            if b[w] == "[NONE SPECIFIED]":
+                                y.append(opm + "\n")
+                            else:
+                                y[w] = opm + "\n"
+                            with open("create.temp", "w+") as a:
+                                a.writelines(y)
+                            os.remove("create.conf")
+                            os.rename("create.temp", "create.conf")
+                        elif opc == 27:
+                            n = "true"
+                        x = str(x)
+                        break
