@@ -2,18 +2,30 @@ import os, time, linecache, urllib, ctypes, ast, subprocess
 from msvcrt import getch
 from decimal import Decimal as decimal
 
+if os.path.isfile("devmode"):
+    d = True
+else:
+    d = False
 if not os.path.isdir("temp"):
     os.mkdir("temp")
 title = ctypes.windll.kernel32.SetConsoleTitleA
 title("PTR2Modder")
-
-urllib.urlretrieve("https://mgrich.github.io/storage/ptr2modder/versionb.txt", "temp/version.txt")
+if d:
+    title("PTR2Modder DEV")
+if not d:
+    urllib.urlretrieve("https://mgrich.github.io/storage/ptr2modder/versionb.txt", "temp/version.txt")
+else:
+    urllib.urlretrieve("https://mgrich.github.io/storage/ptr2modder/versiond.txt", "temp/version.txt")
 v = open("temp/version.txt").read()
 v = float(v[:-1])
-
-if not os.path.isfile("update.exe"):
-    print("Downloading updater..")
-    urllib.urlretrieve("https://mgrich.github.io/storage/ptr2modder/updateb.exe", "update.exe")
+if d:
+    if not os.path.isfile("updated.exe"):
+        print("Downlaoding DEV updater..")
+        urllib.urlretrieve("https://mgrich.github.io/storage/ptr2modder/updated.exe", "updated.exe")
+else:
+    if not os.path.isfile("update.exe"):
+        print("Downloading updater..")
+        urllib.urlretrieve("https://mgrich.github.io/storage/ptr2modder/updateb.exe", "update.exe")
 if not os.path.isdir("config"):
     print("Welcome to PTR2Modder.\nThis is a program specifically made for making and using PTR2 mods.\nSpecial thanks to the PTR2 Modding Discord for motivating me to do this.")
     print("")
@@ -79,6 +91,11 @@ else:
     ibrn = os.getcwd() + "\\config\\ibrn\\imgburn.exe"
     if os.path.isfile("config/create.conf"):
         confc = open("config/create.conf")
+    cre = linecache.getline(conf, 2)
+    if cre == "c\n":
+        cre = True
+    else:
+        cre = False
     print("Refreshing mods..")
     hahayes = os.listdir("mods")
     yeshaha = open("config/mods.conf", "w")
@@ -92,7 +109,10 @@ urllib.urlretrieve("https://mgrich.github.io/storage/ptr2modder/news.txt", "temp
 while True:
     os.system("cls")
     print("")
-    print("PTR2Modder")
+    if not d:
+        print("PTR2Modder")
+    else:
+        print("PTR2Modder (Dev)")
     print("Tool by RMGRich")
     print("Icon by Charx")
     print("")
@@ -100,6 +120,8 @@ while True:
         opt = ["1", "2", "3", "4", "5", "6", "7", "8"]
     else:
         opt = ["1", "2", "3", "4", "5", "6", "7"]
+    if d and cre:
+        opt.append("c")
     while True:
         print("1. Convert ISO mod to usable mod")
         print("2. Apply mod")
@@ -110,6 +132,8 @@ while True:
         print("7. Exit properly")
         if v > 1.4:
             print("8. Install new version")
+        if d and cre:
+            print("C. Creation Menu")
         ch = getch()
         if not ch in opt:
             print("Invalid answer")
@@ -156,6 +180,7 @@ while True:
             yeshaha.write(x + "\n")
         yeshaha.close()
         print("Done.")
+        os.system('pause')
     elif ch == "2": 
         os.chdir("config")
         m = open("mods.conf", "r")
@@ -217,13 +242,13 @@ while True:
             if not str(ate + "\n") in exprz:
                 no.write(ate + "\n")
             no.close()
-            os.system("xcopy /s /q /y " + dc + " miso")
+            os.system("xcopy /s /q /y " + dc + " miso") 
             z = open("config/basic.conf")
             y = z.readlines()
             if not len(y) >= 3:
                 a = open("config/basic.temp", "w+")
                 b = raw_input("What do you want your ISO's name to be called?> ")
-                y.append(b)
+                y.append(b + "\n")
                 a.writelines(y)
                 z.close()
                 a.close()
@@ -242,66 +267,70 @@ while True:
         os.chdir("config/mds")
         frink = open("on.conf", "r")
         mds = frink.readlines()
-        os.chdir("../../mods")
-        mds = map(lambda s: s.strip(), mds)
-        wadl = mds
-        mdl = []
-        mdlo = []
-        for x in mds:
-            md = linecache.getline(x + "/mod.inf", 1)
-            mdlo.append(x)
-            mdl.append(md)
-        mdl = map(lambda s: s.strip(), mdl)
-        while True:
-            print("")
-            print("Active mods:")
-            print('\n'.join(mdl))
-            print("")
-            m = raw_input("Which mod?> ")
-            if not m in mdl:
-                print("Mod doesnt exist.")
-                os.system("pause")
-            else:
-                break
-        blo = mdl.index(m)
-        ate = mdlo[int(blo)]
-        os.chdir(ate)
-        pips = linecache.getline("mod.inf", 5)
-        pips = ast.literal_eval(pips)
-        os.chdir("../..")
-        os.chdir("config/mds")
-        with open('on.temp', 'w+') as hh:
-            for x in wadl:
-                if not x == ate:
-                    hh.write(x + "\n")
-        frink.close()
-        os.remove("on.conf")
-        os.rename("on.temp", "on.conf")
-        os.chdir("../..")
-        for x in pips:
-            if '.' in x:
-                if os.path.isfile("miso\\" + x):
-                    os.remove("miso\\" + x)
-                os.system("copy /y ogiso\\" + x + " miso\\" + x)
-        print("Un-applying mod..")
-        z = open("config/basic.conf")
-        y = z.readlines()
-        if not len(y) >= 3:
-            a = open("config/basic.temp", "w+")
-            b = raw_input("What do you want your ISO's name to be called?> ")
-            y.append(b + "\n")
-            a.writelines(y)
-            z.close()
-            a.close()
-            os.remove("basic.conf")
-            os.rename("basic.temp", "basic.conf")
-        c = map(lambda s: s.strip(), y)
-        print("Done with general modding. Starting with IMGBurn..")
-        os.system("move " + ibrn + ".")
-        os.system("imgburn.exe /MODE BUILD /SRC miso /DEST " + c[2] + ".iso /FILESYSTEM \"ISO9660 + UDF \" /UDFREVISION \"1.02\" /NOIMAGEDETAILS /ROOTFOLDER YES /VOLUMELABEL \"MISO\" /OVERWRITE YES /START /CLOSE")
-        os.system("move imgburn.exe config/ibrn")
-        print("Done! Exported to " + c[2] + ".iso.")
-        os.system("pause")
+        if len(mds) == 0:
+            print("No mods are active.")
+            os.system("pause")
+        else:
+            os.chdir("../../mods")
+            mds = map(lambda s: s.strip(), mds)
+            wadl = mds
+            mdl = []
+            mdlo = []
+            for x in mds:
+                md = linecache.getline(x + "/mod.inf", 1)
+                mdlo.append(x)
+                mdl.append(md)
+            mdl = map(lambda s: s.strip(), mdl)
+            while True:
+                print("")
+                print("Active mods:")
+                print('\n'.join(mdl))
+                print("")
+                m = raw_input("Which mod?> ")
+                if not m in mdl:
+                    print("Mod doesnt exist.")
+                    os.system("pause")
+                else:
+                    break
+            blo = mdl.index(m)
+            ate = mdlo[int(blo)]
+            os.chdir(ate)
+            pips = linecache.getline("mod.inf", 5)
+            pips = ast.literal_eval(pips)
+            os.chdir("../..")
+            os.chdir("config/mds")
+            with open('on.temp', 'w+') as hh:
+                for x in wadl:
+                    if not x == ate:
+                        hh.write(x + "\n")
+            frink.close()
+            os.remove("on.conf")
+            os.rename("on.temp", "on.conf")
+            os.chdir("../..")
+            for x in pips:
+                if '.' in x:
+                    if os.path.isfile("miso\\" + x):
+                        os.remove("miso\\" + x)
+                    os.system("copy /y ogiso\\" + x + " miso\\" + x)
+            print("Un-applying mod..")
+            z = open("config/basic.conf")
+            y = z.readlines()
+            if not len(y) >= 3:
+                a = open("config/basic.temp", "w+")
+                b = raw_input("What do you want your ISO's name to be called?> ")
+                y.append(b + "\n")
+                a.writelines(y)
+                z.close()
+                a.close()
+                os.remove("basic.conf")
+                os.rename("basic.temp", "basic.conf")
+            c = map(lambda s: s.strip(), y)
+            print("Done with general modding. Starting with IMGBurn..")
+            os.system("move " + ibrn + ".")
+            os.system("imgburn.exe /MODE BUILD /SRC miso /DEST " + c[2] + ".iso /FILESYSTEM \"ISO9660 + UDF \" /UDFREVISION \"1.02\" /NOIMAGEDETAILS /ROOTFOLDER YES /VOLUMELABEL \"MISO\" /OVERWRITE YES /START /CLOSE")
+            os.system("move imgburn.exe config/ibrn")
+            print("Done! Exported to " + c[2] + ".iso.")
+            os.system("pause")
     elif ch == "4":
         print("")
         print(open("temp/news.txt").read())
@@ -394,3 +423,35 @@ while True:
         else:
             subprocess.Popen(["python.exe", "update.py"])
         exit()
+    elif ch == "c":
+        ba = False
+        while True:
+            if ba:
+                print("Going to basic..")
+                break
+            else:
+                os.system("cls")
+                print("")
+                print("PTR2Modder - CREATE")
+                print("")
+                opt = ["1", "2", "3", "b"]
+                if d and cre:
+                    opt.append("c")
+                while True:
+                    print("1. Create mod (WIP)")
+                    print("2. Manage mods (WIP)")
+                    print("3. Options (WIP)")
+                    print("B. Basic")
+                    ch = getch()
+                    if not ch in opt:
+                        print("Invalid answer")
+                        time.sleep(3)
+                        os.system("cls")
+                        print("")
+                        print("PTR2Modder - CREATE")
+                        print("")
+                    else:
+                        break
+            if ch == "b":
+                ba = True
+        
