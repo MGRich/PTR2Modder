@@ -116,6 +116,9 @@ updateb.exe
 updated.exe
 build.bat
 buildd.bat
+buildb.bat
 devmode
 updated.py
 /distd
+*.iso
+/.vscode

@@ -186,72 +186,80 @@ while True:
             mdl.append(md)
         mdl = map(lambda s: s.strip(), mdl)
         while True:
-            print("")
-            print("Mods installed:")
-            print('\n'.join(mdl))
-            print("")
-            m = raw_input("Which mod?> ")
-            if not m in mdl:
-                print("Mod doesnt exist.")
-                os.system("pause")
-            else:   
-                blo = mdl.index(m)
-                ate = mdlo[int(blo)]
-                os.chdir(ate)
-                print("Is this the mod you want? (N if no, anything else if yes)")
-                da = open("mod.inf")
-                dat = da.readlines()
-                dat = map(lambda s: s.strip(), dat)
-                print("Name: " + dat[0])
-                print("Author: " + dat[1])
-                print("Version: " + dat[2])
-                print("Description: " + dat[3])
-                da.close()
-                while True:
-                    fishy = getch()
-                    if fishy == "n":
-                        mrl = "n"
-                        break
+            while True:
+                print("")
+                print("Mods installed:")
+                print('\n'.join(mdl))
+                print("")
+                m = raw_input("Which mod?> ")
+                if not m in mdl:
+                    print("Mod doesnt exist.")
+                    os.system("pause")
+                else:   
+                    blo = mdl.index(m)
+                    ate = mdlo[int(blo)]
+                    os.chdir(ate)
+                    print("Is this the mod you want? (N if no, anything else if yes)")
+                    da = open("mod.inf")
+                    dat = da.readlines()
+                    dat = map(lambda s: s.strip(), dat)
+                    print("Name: " + dat[0])
+                    print("Author: " + dat[1])
+                    print("Version: " + dat[2])
+                    print("Description: " + dat[3])
+                    da.close()
+                    while True:
+                        fishy = getch()
+                        if fishy == "n":
+                            mrl = "n"
+                            break
+                        else:
+                            mrl = "h"
+                            break
+                    if mrl == "n":
+                        print("Returning to list..")
+                        os.chdir("..")
                     else:
-                        mrl = "h"
                         break
-                if mrl == "n":
-                    print("Returning to list..")
-                    os.chdir("..")
+            pips = linecache.getline("mod.inf", 6)
+            if not pips == str(linecache.getline(conf, 1)):
+                print("This mod is not meant for your region.")
+            else:
+                os.chdir("iso")
+                dc = os.getcwd()
+                os.chdir("../../..")
+                print("Applying mod..")
+                no = open("config/mds/on.conf", "a+")
+                exprz = no.readlines()
+                if not str(ate + "\n") in exprz:
+                    no.write(ate + "\n")
+                no.close()
+                os.system("xcopy /s /q /y " + dc + " miso") 
+                print("Would you like to add more? (Y if yes)")
+                mmm = getch()
+                if mmm == "y":
+                    os.chdir("mods")
+                    print("Going to list..")
                 else:
+                    z = open("config/basic.conf")
+                    y = z.readlines()
+                    if not len(y) >= 3:
+                        a = open("config/basic.temp", "w+")
+                        b = raw_input("What do you want your ISO's name to be called?> ")
+                        y.append(b + "\n")
+                        a.writelines(y)
+                        z.close()
+                        a.close()
+                        os.remove("basic.conf")
+                        os.rename("basic.temp", "basic.conf")
+                    z.close()
+                    c = map(lambda s: s.strip(), y)
+                    print("Done with general modding. Starting with IMGBurn..")
+                    os.system("move " + ibrn + ".")
+                    os.system("imgburn.exe /MODE BUILD /SRC miso /DEST " + c[2] + ".iso /FILESYSTEM \"ISO9660 + UDF \" /UDFREVISION \"1.02\" /NOIMAGEDETAILS /ROOTFOLDER YES /VOLUMELABEL \"MISO\" /OVERWRITE YES /START /CLOSE")
+                    os.system("move imgburn.exe config/ibrn")
+                    print("Done! Exported to " + c[2] + ".iso.")
                     break
-        pips = linecache.getline("mod.inf", 6)
-        if not pips == str(linecache.getline(conf, 1)):
-            print("This mod is not meant for your region.")
-        else:
-            os.chdir("iso")
-            dc = os.getcwd()
-            os.chdir("../../..")
-            print("Applying mod..")
-            no = open("config/mds/on.conf", "a+")
-            exprz = no.readlines()
-            if not str(ate + "\n") in exprz:
-                no.write(ate + "\n")
-            no.close()
-            os.system("xcopy /s /q /y " + dc + " miso") 
-            z = open("config/basic.conf")
-            y = z.readlines()
-            if not len(y) >= 3:
-                a = open("config/basic.temp", "w+")
-                b = raw_input("What do you want your ISO's name to be called?> ")
-                y.append(b + "\n")
-                a.writelines(y)
-                z.close()
-                a.close()
-                os.remove("basic.conf")
-                os.rename("basic.temp", "basic.conf")
-            z.close()
-            c = map(lambda s: s.strip(), y)
-            print("Done with general modding. Starting with IMGBurn..")
-            os.system("move " + ibrn + ".")
-            os.system("imgburn.exe /MODE BUILD /SRC miso /DEST " + c[2] + ".iso /FILESYSTEM \"ISO9660 + UDF \" /UDFREVISION \"1.02\" /NOIMAGEDETAILS /ROOTFOLDER YES /VOLUMELABEL \"MISO\" /OVERWRITE YES /START /CLOSE")
-            os.system("move imgburn.exe config/ibrn")
-            print("Done! Exported to " + c[2] + ".iso.")
         os.system("pause")
     elif ch == "3":
         #tbh, very near same to ch 2
