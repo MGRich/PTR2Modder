@@ -1,6 +1,7 @@
 import os, time, linecache, urllib, ctypes, ast, subprocess, webbrowser
 from msvcrt import getch
 from decimal import Decimal as decimal
+from fnmatch import filter as wcrd
 
 if os.path.isfile("devmode"):
     d = True
@@ -107,7 +108,7 @@ while True:
     print("Tool by RMGRich")
     print("Icon by Charx")
     print("")
-    if v > 1.41:
+    if v > 1.42:
         opt = ["1", "2", "3", "4", "5", "6", "7", "8"]
     else:
         opt = ["1", "2", "3", "4", "5", "6", "7"]
@@ -121,7 +122,7 @@ while True:
         print("5. Refresh mods")
         print("6. Options")
         print("7. Exit properly")
-        if v > 1.41:
+        if v > 1.42:
             print("8. Install new version")
         if d and cre:
             print("C. Creation Menu")
@@ -131,7 +132,10 @@ while True:
             time.sleep(3)
             os.system("cls")
             print("")
-            print("PTR2Modder")
+            if not d:
+                print("PTR2Modder")
+            else:
+                print("PTR2Modder (Dev)")
             print("Tool by RMGRich")
             print("Icon by Charx")
             print("")
@@ -159,8 +163,39 @@ while True:
                     h = os.path.join(root,filename)
                     h = h[2:]
                     mm.append(h)
+        lmfao = []
+        for x in range(1,9):
+            x = str(x)
+            o = "ST0" + x
+            f = "VS0" + x
+            if o in str(mm):
+                lmfao.append(x)
+            if f in str(mm):
+                lmfao.append("VS" + x)
+        if 'stbn' in str(mm).lower():
+            lmfao.append("Bonus")
+        if 'stmenu' in str(mm).lower():
+            lmfao.append("Stage Menu")
+        if 'title.int' in str(mm).lower():
+            lmfao.append("Title")
+        charx = []
+        #conditional checks
+        if 'wp2' in str(mm).lower():
+            charx.append('Music Modding')
+        if 'int' in str(mm).lower():
+            charx.append('INT Mod')
+        if 'olm' in str(mm).lower():
+            charx.append('OLM Editing')
+        if 'xtr' in str(mm).lower():
+            charx.append('Cutscene Editing')
+        if 'hk0' in str(mm).lower():
+            charx.append('Boxy Editing')
+        if 'ext' in str(mm).lower():
+            charx.append('Music Box Editing')
+        if 'SCUS' in str(mm).lower():
+            charx.append('ELF Model Editing')
         m.write(str(mm))
-        m.write("\n" + str(linecache.getline(conf, 1)))
+        m.write("\n" + str(linecache.getline(conf, 1)) + str(lmfao) + "\n" + str(charx))
         m.close()
         os.chdir("../../..")
         print("Refreshing mods..")
@@ -207,6 +242,20 @@ while True:
                     print("Author: " + dat[1])
                     print("Version: " + dat[2])
                     print("Description: " + dat[3])
+                    mmtastyyy = ast.literal_eval(dat[6])
+                    mmtastyyy = ", ".join(mmtastyyy)
+                    print("Stages: " + mmtastyyy)
+                    try:
+                        mmtastyyy = dat[7]
+                    except IndexError:
+                        mmtastyyy = "None listed"
+                    else:
+                        if mmtastyyy == "[]":
+                            mmtastyyy = "None listed"
+                        else:
+                            mmtastyyy = ast.literal_eval(mmtastyyy)
+                            mmtastyyy = ", ".join(mmtastyyy)
+                    print("Mod types: " + mmtastyyy)
                     da.close()
                     while True:
                         fishy = getch()
@@ -470,7 +519,7 @@ while True:
                     with open("create.conf") as z:
                         y = z.readlines()
                         b = map(lambda s: s.strip(), y)
-                    print("There isn't much here yet, but as I make create, there should be more popping up.")
+                    print("There isn't much here yet, bu    t as I make create, there should be more popping up.")
                     print("Options (up, down, or enter (esc to exit)):")
                     o1 = " Workspace:  "
                     while True:
