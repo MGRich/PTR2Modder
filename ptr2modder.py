@@ -164,35 +164,38 @@ while True:
                     h = h[2:]
                     mm.append(h)
         lmfao = []
+        dect = str(mm).lower()
         for x in range(1,9):
             x = str(x)
-            o = "ST0" + x
-            f = "VS0" + x
-            if o in str(mm):
+            o = "st0" + x
+            f = "vs0" + x
+            if o in dect:
                 lmfao.append(x)
-            if f in str(mm):
+            if f in dect:
                 lmfao.append("VS" + x)
-        if 'stbn' in str(mm).lower():
+        if 'stbn' in dect:
             lmfao.append("Bonus")
-        if 'stmenu' in str(mm).lower():
+        if 'stmenu' in dect:
             lmfao.append("Stage Menu")
-        if 'title.int' in str(mm).lower():
+        if 'title.int' in dect:
             lmfao.append("Title")
         charx = []
         #conditional checks
-        if 'wp2' in str(mm).lower():
+        if 'wp2' in dect:
             charx.append('Music Modding')
-        if 'int' in str(mm).lower():
+            if 'gm0n' in dect:
+                charx.append("Bad/Awful Editing")
+        if 'int' in dect:
             charx.append('INT Mod')
-        if 'olm' in str(mm).lower():
+        if 'olm' in dect:
             charx.append('OLM Editing')
-        if 'xtr' in str(mm).lower():
+        if 'xtr' in dect:
             charx.append('Cutscene Editing')
-        if 'hk0' in str(mm).lower():
+        if 'hk0' in dect:
             charx.append('Boxy Editing')
-        if 'ext' in str(mm).lower():
+        if 'ext' in dect:
             charx.append('Music Box Editing')
-        if 'SCUS' in str(mm).lower():
+        if 'scus' in dect:
             charx.append('ELF Model Editing')
         m.write(str(mm))
         m.write("\n" + str(linecache.getline(conf, 1)) + str(lmfao) + "\n" + str(charx))
