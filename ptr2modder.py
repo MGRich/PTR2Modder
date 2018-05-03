@@ -108,7 +108,7 @@ while True:
     print("Tool by RMGRich")
     print("Icon by Charx")
     print("")
-    if v > 1.42:
+    if v > 1.5:
         opt = ["1", "2", "3", "4", "5", "6", "7", "8"]
     else:
         opt = ["1", "2", "3", "4", "5", "6", "7"]
@@ -122,7 +122,7 @@ while True:
         print("5. Refresh mods")
         print("6. Options")
         print("7. Exit properly")
-        if v > 1.42:
+        if v > 1.5:
             print("8. Install new version")
         if d and cre:
             print("C. Creation Menu")
