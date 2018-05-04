@@ -1,7 +1,21 @@
-import os, time, linecache, urllib, ctypes, ast, subprocess, webbrowser
-from msvcrt import getch
+import ast
+import ctypes
+import linecache
+import os
+import subprocess
+import time
+import urllib
+import webbrowser
+import sys
 from decimal import Decimal as decimal
-from fnmatch import filter as wcrd
+from msvcrt import getch
+import colorama
+from termcolor import colored as color
+
+import colors
+
+colorama.init()
+colorf = sys.stdout.write
 
 if os.path.isfile("devmode"):
     d = True
@@ -101,6 +115,7 @@ urllib.urlretrieve("https://mgrich.github.io/storage/ptr2modder/news.txt", "temp
 while True:
     os.system("cls")
     print("")
+    colorf(colors.red)
     if not d:
         print("PTR2Modder")
     else:
@@ -115,6 +130,7 @@ while True:
     if d and cre:
         opt.append("c")
     while True:
+        colorf(colors.reset)
         print("1. Convert ISO mod to usable mod")
         print("2. Apply mod")
         print("3. Unapply mod")
@@ -132,6 +148,7 @@ while True:
             time.sleep(3)
             os.system("cls")
             print("")
+            colorf(colors.red)
             if not d:
                 print("PTR2Modder")
             else:
@@ -214,15 +231,28 @@ while True:
         os.chdir("config")
         m = open("mods.conf", "r")
         mds = m.readlines()
-        os.chdir("../mods")
+        os.chdir("mds")
+        ooo = open("on.conf")
+        con = ooo.readlines()
+        con = map(lambda s: s.strip(), con)
+        os.chdir("../../mods")
         mds = map(lambda s: s.strip(), mds)
         mdl = []
-        mdlo = []
+        omdl = []
+        onli = []
         for x in mds:
             md = linecache.getline(x + "/mod.inf", 1)
-            mdlo.append(x)
+            omdl.append(md)
+            if x in con:
+                md = md[:-1]
+                onli.append(md)
+                md = color(md, 'red')
+            else:
+                md = color(md[:-1], 'green')
             mdl.append(md)
         mdl = map(lambda s: s.strip(), mdl)
+        omdl = map(lambda s: s.strip(), omdl)
+        onli = map(lambda s: s.strip(), onli)
         while True:
             while True:
                 print("")
@@ -230,12 +260,15 @@ while True:
                 print('\n'.join(mdl))
                 print("")
                 m = raw_input("Which mod?> ")
-                if not m in mdl:
+                if m in onli:
+                    print("Mod is already active.")
+                    os.system("pause")
+                elif not m in omdl:
                     print("Mod doesnt exist.")
                     os.system("pause")
-                else:   
-                    blo = mdl.index(m)
-                    ate = mdlo[int(blo)]
+                else:
+                    blo = omdl.index(m)
+                    ate = mds[int(blo)]
                     os.chdir(ate)
                     print("Is this the mod you want? (N if no, anything else if yes)")
                     da = open("mod.inf")
@@ -245,8 +278,16 @@ while True:
                     print("Author: " + dat[1])
                     print("Version: " + dat[2])
                     print("Description: " + dat[3])
-                    mmtastyyy = ast.literal_eval(dat[6])
-                    mmtastyyy = ", ".join(mmtastyyy)
+                    try:
+                        mmtastyyy = dat[6]
+                    except IndexError:
+                        mmtastyyy = "None listed"
+                    else:
+                        if mmtastyyy == "[]":
+                            mmtastyyy = "None listed"
+                        else:
+                            mmtastyyy = ast.literal_eval(mmtastyyy)
+                            mmtastyyy = ", ".join(mmtastyyy)                    
                     print("Stages: " + mmtastyyy)
                     try:
                         mmtastyyy = dat[7]
@@ -326,10 +367,8 @@ while True:
             mds = map(lambda s: s.strip(), mds)
             wadl = mds
             mdl = []
-            mdlo = []
             for x in mds:
                 md = linecache.getline(x + "/mod.inf", 1)
-                mdlo.append(x)
                 mdl.append(md)
             mdl = map(lambda s: s.strip(), mdl)
             while True:
@@ -344,7 +383,7 @@ while True:
                 else:
                     break
             blo = mdl.index(m)
-            ate = mdlo[int(blo)]
+            ate = mds[int(blo)]
             os.chdir(ate)
             pips = linecache.getline("mod.inf", 5)
             pips = ast.literal_eval(pips)
@@ -485,12 +524,14 @@ while True:
             else:
                 os.system("cls")
                 print("")
+                colorf(colors.bcyan)
                 print("PTR2Modder - CREATE")
                 print("")
                 opt = ["1", "2", "3", "b"]
                 if d and cre:
                     opt.append("c")
                 while True:
+                    colorf(colors.reset)
                     print("1. Create mod (WIP)")
                     print("2. Manage mods (WIP)")
                     print("3. Options")
@@ -501,6 +542,7 @@ while True:
                         time.sleep(3)
                         os.system("cls")
                         print("")
+                        colorf(colors.bcyan)
                         print("PTR2Modder - CREATE")
                         print("")
                     else:
