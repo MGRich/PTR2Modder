@@ -18,6 +18,7 @@ while True:
     else:
         break
 
+ms = raw_input("What is your MINGW64 PTR2Tools directory?\n(msysinstall)/mingw64/bin> ")
 n = False
 x = 0
 #HERE WE GOOOOOOOO
@@ -50,8 +51,12 @@ while True:
             print(z)
         print("-------")
         #print available options
-        #while True: #to sort for eas y
-        #    pass
+        op = ["c"]
+        while True: #to sort for eas y
+            print("C. CD Mode (modifying/changing dirs)") 
+            if os.path.split(os.getcwd())[-1] == "DATA":
+                print("I. Extract INT")
+                op.append("i")
         opc = ord(getch())
         if opc == 224:
             opd = ord(getch())
