@@ -7,12 +7,35 @@ import time
 import urllib
 import webbrowser
 import sys
+import math
+from difflib import get_close_matches as match
 from decimal import Decimal as decimal
 from msvcrt import getch
 import colorama
 from termcolor import colored as color
 
-import colors
+#colors
+black = "\033[1;30m"
+red =  "\033[1;31m"
+green =  "\033[1;32m"
+yellow =  "\033[1;33m"
+blue =  "\033[1;34m"
+magenta =  "\033[1;35m"
+cyan =  "\033[1;36m"
+white =  "\033[1;37m"
+
+bblack =  "\033[1;30;1m"
+bred =  "\033[1;31;1m"
+bgreen =  "\033[1;32;1m"
+byellow =  "\033[1;33;1m"
+bblue =  "\033[1;34;1m"
+bmagenta =  "\033[1;35;1m"
+bcyan =  "\033[1;36;1m"
+bwhite =  "\033[1;37;1m"
+
+reset =  "\033[1;0m"
+bold = "\033[1;1m"
+#endcolors
 
 colorama.init()
 colorf = sys.stdout.write
@@ -115,7 +138,7 @@ urllib.urlretrieve("https://mgrich.github.io/storage/ptr2modder/news.txt", "temp
 while True:
     os.system("cls")
     print("")
-    colorf(colors.red)
+    colorf(red)
     if not d:
         print("PTR2Modder")
     else:
@@ -130,7 +153,7 @@ while True:
     if d and cre:
         opt.append("c")
     while True:
-        colorf(colors.reset)
+        colorf(reset)
         print("1. Convert ISO mod to usable mod")
         print("2. Apply mod")
         print("3. Unapply mod")
@@ -148,7 +171,7 @@ while True:
             time.sleep(3)
             os.system("cls")
             print("")
-            colorf(colors.red)
+            colorf(red)
             if not d:
                 print("PTR2Modder")
             else:
@@ -253,68 +276,115 @@ while True:
         mdl = map(lambda s: s.strip(), mdl)
         omdl = map(lambda s: s.strip(), omdl)
         onli = map(lambda s: s.strip(), onli)
+        p = 1
+        mp = int(str(math.ceil((len(mdl) + .0) / 5))[:-2])
+        mdlf = mdl
+        omdlf = omdl
+        ex = False
         while True:
             while True:
+                if ex:
+                    break
+                os.system("cls")
+                mdp = mdlf[p * 5 - 5:p * 5]
                 print("")
+                print("Page " + str(p) + " of " + str(mp) + " (" + str(len(omdlf)) + " mods)")
+                print("--pu to move up a page, --pd to move down a page.\n--p (page number) to skip to a page\n--s (query/nothing (to unfilter)) to search.\n--e to exit.\n")
                 print("Mods installed:")
-                print('\n'.join(mdl))
+                print('\n'.join(mdp))
                 print("")
                 m = raw_input("Which mod?> ")
-                if m in onli:
-                    print("Mod is already active.")
-                    os.system("pause")
-                elif not m in omdl:
-                    print("Mod doesnt exist.")
-                    os.system("pause")
+                if m == "--e":
+                    ex = True
+                elif m == "--pu":
+                    p = p + 1
+                    if p > mp:
+                        p = p - 1
+                elif m == "--pd":
+                    p = p - 1
+                    print("mmm")
+                    if p <= 0:
+                        p = p + 1
+                elif m[:3] == "--p":
+                    p = int(m[4:])
+                elif m[:3] == "--s":
+                    qu = m[4:]
+                    mdlf = [x for x in mdl if qu in x.lower()]
+                    omdlf = [x for x in omdl if qu in x.lower()]
+                    p = 1
+                    mp = int(str(math.ceil((len(mdlf) + .0) / 5))[:-2])
+                    if mp == 0:
+                        print("None found.")
+                        os.system("pause")
+                        mdlf = mdl
+                        omdlf = omdl
+                        mp = int(str(math.ceil((len(mdlf) + .0) / 5))[:-2])
+                    else:
+                        continue
                 else:
-                    blo = omdl.index(m)
-                    ate = mds[int(blo)]
-                    os.chdir(ate)
-                    print("Is this the mod you want? (N if no, anything else if yes)")
-                    da = open("mod.inf")
-                    dat = da.readlines()
-                    dat = map(lambda s: s.strip(), dat)
-                    print("Name: " + dat[0])
-                    print("Author: " + dat[1])
-                    print("Version: " + dat[2])
-                    print("Description: " + dat[3])
+                    m = match(m, omdlf, len(omdlf), 0)
                     try:
-                        mmtastyyy = dat[6]
-                    except IndexError:
-                        mmtastyyy = "None listed"
+                        m = m[0]
+                    except:
+                        m = None
+                    print(m)
+                    if m in onli:
+                        print("Mod is already active.")
+                        os.system("pause")
+                    elif not m in omdlf:
+                        print("Mod doesnt exist or is not in query.")
+                        os.system("pause")
                     else:
-                        if mmtastyyy == "[]":
+                        blo = omdlf.index(m)
+                        ate = mds[int(blo)]
+                        os.chdir(ate)
+                        print("Is this the mod you want? (N if no, anything else if yes)")
+                        da = open("mod.inf")
+                        dat = da.readlines()
+                        dat = map(lambda s: s.strip(), dat)
+                        print("Name: " + dat[0])
+                        print("Author: " + dat[1])
+                        print("Version: " + dat[2])
+                        print("Description: " + dat[3])
+                        try:
+                            mmtastyyy = dat[6]
+                        except IndexError:
                             mmtastyyy = "None listed"
                         else:
-                            mmtastyyy = ast.literal_eval(mmtastyyy)
-                            mmtastyyy = ", ".join(mmtastyyy)                    
-                    print("Stages: " + mmtastyyy)
-                    try:
-                        mmtastyyy = dat[7]
-                    except IndexError:
-                        mmtastyyy = "None listed"
-                    else:
-                        if mmtastyyy == "[]":
+                            if mmtastyyy == "[]":
+                                mmtastyyy = "None listed"
+                            else:
+                                mmtastyyy = ast.literal_eval(mmtastyyy)
+                                mmtastyyy = ", ".join(mmtastyyy)                    
+                        print("Stages: " + mmtastyyy)
+                        try:
+                            mmtastyyy = dat[7]
+                        except IndexError:
                             mmtastyyy = "None listed"
                         else:
-                            mmtastyyy = ast.literal_eval(mmtastyyy)
-                            mmtastyyy = ", ".join(mmtastyyy)
-                    print("Mod types: " + mmtastyyy)
-                    da.close()
-                    while True:
-                        fishy = getch()
-                        if fishy == "n":
-                            mrl = "n"
-                            break
+                            if mmtastyyy == "[]":
+                                mmtastyyy = "None listed"
+                            else:
+                                mmtastyyy = ast.literal_eval(mmtastyyy)
+                                mmtastyyy = ", ".join(mmtastyyy)
+                        print("Mod types: " + mmtastyyy)
+                        da.close()
+                        while True:
+                            fishy = getch()
+                            if fishy == "n":
+                                mrl = "n"
+                                break
+                            else:
+                                mrl = "h"
+                                break
+                        if mrl == "n":
+                            print("Returning to list..")
+                            os.chdir("..")
                         else:
-                            mrl = "h"
                             break
-                    if mrl == "n":
-                        print("Returning to list..")
-                        os.chdir("..")
-                    else:
-                        break
             pips = linecache.getline("mod.inf", 6)
+            if ex:
+                break
             if not pips == str(linecache.getline(conf, 1)):
                 print("This mod is not meant for your region.")
             else:
@@ -353,7 +423,8 @@ while True:
                     os.system("move imgburn.exe config/ibrn")
                     print("Done! Exported to " + c[2] + ".iso.")
                     break
-        os.system("pause")
+        if not ex:
+            os.system("pause")
     elif ch == "3":
         #tbh, very near same to ch 2
         os.chdir("config/mds")
@@ -403,24 +474,31 @@ while True:
                         os.remove("miso\\" + x)
                     os.system("copy /y ogiso\\" + x + " miso\\" + x)
             print("Un-applying mod..")
-            z = open("config/basic.conf")
-            y = z.readlines()
-            if not len(y) >= 3:
-                a = open("config/basic.temp", "w+")
-                b = raw_input("What do you want your ISO's name to be called?> ")
-                y.append(b + "\n")
-                a.writelines(y)
-                z.close()
-                a.close()
-                os.remove("basic.conf")
-                os.rename("basic.temp", "basic.conf")
-            c = map(lambda s: s.strip(), y)
-            print("Done with general modding. Starting with IMGBurn..")
-            os.system("move " + ibrn + ".")
-            os.system("imgburn.exe /MODE BUILD /SRC miso /DEST " + c[2] + ".iso /FILESYSTEM \"ISO9660 + UDF \" /UDFREVISION \"1.02\" /NOIMAGEDETAILS /ROOTFOLDER YES /VOLUMELABEL \"MISO\" /OVERWRITE YES /START /CLOSE")
-            os.system("move imgburn.exe config/ibrn")
-            print("Done! Exported to " + c[2] + ".iso.")
-            os.system("pause")
+            print("Would you like to add more? (Y if yes)")
+            mmm = getch()
+            if mmm == "y":
+                os.chdir("mods")
+                print("Going to list..")
+            else:
+                z = open("config/basic.conf")
+                y = z.readlines()
+                if not len(y) >= 3:
+                    a = open("config/basic.temp", "w+")
+                    b = raw_input("What do you want your ISO's name to be called?> ")
+                    y.append(b + "\n")
+                    a.writelines(y)
+                    z.close()
+                    a.close()
+                    os.remove("basic.conf")
+                    os.rename("basic.temp", "basic.conf")
+                c = map(lambda s: s.strip(), y)
+                print("Done with general modding. Starting with IMGBurn..")
+                os.system("move " + ibrn + ".")
+                os.system("imgburn.exe /MODE BUILD /SRC miso /DEST " + c[2] + ".iso /FILESYSTEM \"ISO9660 + UDF \" /UDFREVISION \"1.02\" /NOIMAGEDETAILS /ROOTFOLDER YES /VOLUMELABEL \"MISO\" /OVERWRITE YES /START /CLOSE")
+                os.system("move imgburn.exe config/ibrn")
+                print("Done! Exported to " + c[2] + ".iso.")
+                os.system("pause")
+                break
     elif ch == "4":
         print("")
         print(open("temp/news.txt").read())
@@ -524,15 +602,15 @@ while True:
             else:
                 os.system("cls")
                 print("")
-                colorf(colors.bcyan)
+                colorf(bcyan)
                 print("PTR2Modder - CREATE")
                 print("")
                 opt = ["1", "2", "3", "b"]
                 if d and cre:
                     opt.append("c")
                 while True:
-                    colorf(colors.reset)
-                    print("1. Create mod (WIP)")
+                    colorf(reset)
+                    print("1. Create mod")
                     print("2. Manage mods (WIP)")
                     print("3. Options")
                     print("B. Basic")
@@ -542,13 +620,36 @@ while True:
                         time.sleep(3)
                         os.system("cls")
                         print("")
-                        colorf(colors.bcyan)
+                        colorf(bcyan)
                         print("PTR2Modder - CREATE")
                         print("")
                     else:
                         break
             if ch == "b":
                 ba = True
+            elif ch == "1":
+                with open("config/create.conf") as x:
+                    crtc = x.readlines()
+                os.chdir(crtc[0][:-1])
+                a = raw_input("What do you want the mods' folder to be called?> ")
+                os.mkdir(a)
+                os.chdir(a)
+                print("Now to setup the BASIC configuration:")
+                m = open("mod.inf", "w+")
+                h1 = str(raw_input("Name of mod> "))
+                h2 = str(raw_input("Author> "))
+                h3 = str(raw_input("Version> "))
+                h4 = str(raw_input("Description> "))
+                m.write(h1 + "\n" + h2 + "\n" + h3 + "\n" + h4 + "\n[]\n" + str(linecache.getline(conf, 1)) + "\n[]\n[]")
+                m.close()
+                print("Mod is now ready for editing. Launching the mod editor.")
+                os.system("pause")
+                mod1 = a
+                os.chdir("../..")
+                if os.path.isfile("ptr2modder.py"):
+                    subprocess.Popen('modman.py' + a + crtc[0][:-1], shell=True)
+                else:
+                    subprocess.Popen('modman.exe' + a + crtc[0][:-1], shell=True)
             elif ch == "3":
                 os.chdir("config")
                 x = "1"
@@ -564,7 +665,6 @@ while True:
                     with open("create.conf") as z:
                         y = z.readlines()
                         b = map(lambda s: s.strip(), y)
-                    print("There isn't much here yet, bu    t as I make create, there should be more popping up.")
                     print("Options (up, down, or enter (esc to exit)):")
                     o1 = " Workspace:  "
                     while True:
