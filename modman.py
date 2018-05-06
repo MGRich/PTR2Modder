@@ -19,14 +19,15 @@ while True:
         break
 
 n = False
+x = 0
 #HERE WE GOOOOOOOO
 while True:
     if n:
         break
-    x = 0
     os.system("cls")
     while True:
-        dir = os.listdir(".")
+        odir = os.listdir(".")
+        dir = odir
         for y, z in enumerate(dir):
             dir[y] = " " + z
         try:
@@ -38,24 +39,30 @@ while True:
         ob[0] = ">"
         ob = "".join(ob)
         try:
-            dir[x] = ob
+            for y, z in enumerate(dir):
+                if y == x:
+                    dir[x] = ob
+                else:
+                    dir[x] = odir[x]     
         except IndexError:
             pass
         for z in dir:
-            print(z + "\n")
+            print(z)
+        print("-------")
+        #print available options
+        #while True: #to sort for eas y
+        #    pass
         opc = ord(getch())
         if opc == 224:
-            x = int(x)
             opd = ord(getch())
             if opd == 80:    
                 x = x + 1
-                if x > 1:
-                    x = 1
+                if x > len(dir) - 1:
+                    x = len(dir) - 1
             if opd == 72:
                 x = x - 1
-                if x < len(dir):
-                    x = len(dir)
+                if x < 0:
+                    x = 0
         elif opc == 27:
             n = True
-        x = str(x)
         break
